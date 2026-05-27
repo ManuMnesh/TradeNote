@@ -1,8 +1,16 @@
-# Using 18 alpine because supports arm/v8 and arm/v8 needed for silicon chips
-FROM node:18-alpine
-RUN apk add --no-cache bash
+# Build and run the TradeNote app in a single image for Coolify and plain Docker Compose.
+FROM node:20-alpine
+
 WORKDIR /app
-ADD ./ .
-RUN npm install
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . ./
 RUN npm run build
+
+ENV NODE_ENV=production
+
+EXPOSE 8080
+
 CMD ["npm", "start"]

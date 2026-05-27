@@ -20,14 +20,28 @@ For detailed installation and user guide, please visit the [documentation](https
 - Docker Compose
 
 ### Installation
-1. Download the docker compose.yml file
-2. Run `docker compose up -d`
+1. Copy `docker-compose.yaml` and `.env.example` to your server.
+2. Create a `.env` file from the example and set your values.
+3. Run `docker compose up -d`.
 
 This will automatically setup the database (mongodDB) and the TradeNote app.
 
 You can then access the website on http://localhost:8080.
 
 If you cannot access the website, please refer to the importante notice above (and try changing the mongo version) or get support via [Discord](https://discord.gg/ZbHekKYb85 "Discord")
+
+### Coolify
+Use the same `docker-compose.yaml` on your VPS in Coolify.
+
+Set the following environment variables in Coolify or in your `.env` file:
+- `APP_ID`
+- `MASTER_KEY`
+- `MONGO_USER`
+- `MONGO_PASSWORD`
+- `TRADENOTE_DATABASE`
+- `TRADENOTE_PORT`
+
+The app service exposes port `8080` and joins Coolify’s external `coolify` network. MongoDB stays on the internal network and persists data in the `tradenote_mongo_data` volume.
 
 ## Docker
 ### Requirements

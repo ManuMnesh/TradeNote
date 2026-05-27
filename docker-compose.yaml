@@ -1,0 +1,46 @@
+name: tradenote
+
+services:
+  tradenote:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: tradenote:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      TRADENOTE_PORT: ${TRADENOTE_PORT:-8080}
+      TRADENOTE_DATABASE: ${TRADENOTE_DATABASE:-tradenote}
+      APP_ID: ${APP_ID:-change-me}
+      MASTER_KEY: ${MASTER_KEY:-change-me}
+      MONGO_URI: mongodb://${MONGO_USER:-tradenote}:${MONGO_PASSWORD:-change-me}@mongo:27017/${TRADENOTE_DATABASE:-tradenote}?authSource=admin
+    ports:
+      - "${TRADENOTE_PORT:-8080}:8080"
+    depends_on:
+      - mongo
+    networks:
+      - coolify
+      - tradenote_internal
+
+  mongo:
+    image: mongo:7.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-tradenote}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-change-me}
+      MONGO_INITDB_DATABASE: ${TRADENOTE_DATABASE:-tradenote}
+    volumes:
+      - tradenote_mongo_data:/data/db
+    expose:
+      - "27017"
+    networks:
+      - tradenote_internal
+
+volumes:
+  tradenote_mongo_data:
+
+networks:
+  coolify:
+    external: true
+  tradenote_internal:
+    driver: bridge
