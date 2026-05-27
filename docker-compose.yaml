@@ -14,8 +14,8 @@ services:
       APP_ID: ${APP_ID:-change-me}
       MASTER_KEY: ${MASTER_KEY:-change-me}
       MONGO_URI: mongodb://${MONGO_USER:-tradenote}:${MONGO_PASSWORD:-change-me}@mongo:27017/${TRADENOTE_DATABASE:-tradenote}?authSource=admin
-    ports:
-      - "${TRADENOTE_PORT:-8080}:8080"
+    expose:
+      - "8080"
     depends_on:
       - mongo
     networks:
