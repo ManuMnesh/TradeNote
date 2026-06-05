@@ -1,5 +1,5 @@
 # Build and run the TradeNote app in a single image for Coolify and plain Docker Compose.
-FROM node:20-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
