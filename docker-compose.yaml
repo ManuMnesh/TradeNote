@@ -16,8 +16,15 @@ services:
       MONGO_URI: mongodb://${MONGO_USER:-tradenote}:${MONGO_PASSWORD:-change-me}@mongo:27017/${TRADENOTE_DATABASE:-tradenote}?authSource=admin
     expose:
       - "8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --spider http://localhost:$${TRADENOTE_PORT:-8080}/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     networks:
       - coolify
       - tradenote_internal
@@ -33,6 +40,12 @@ services:
       - tradenote_mongo_data:/data/db
     expose:
       - "27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     networks:
       - tradenote_internal
 

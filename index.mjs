@@ -48,6 +48,10 @@ let tradenoteDatabase = process.env.TRADENOTE_DATABASE
 var app = express();
 app.use(express.json());
 
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 const port = process.env.TRADENOTE_PORT;
 const PROXY_PORT = 39482;
 
